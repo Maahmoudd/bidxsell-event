@@ -13,7 +13,8 @@ class CaesarEncodeAction implements ICaesarEncodeAction
         $result = array_map(function ($char) use ($shift) {
             if (ctype_alpha($char)) {
                 $asciiOffset = ctype_upper($char) ? 65 : 97;
-                return chr(($asciiOffset + (ord($char) - $asciiOffset + $shift) % 26));
+                // Calculate the new position and handle wrapping for negative shifts
+                return chr(($asciiOffset + (ord($char) - $asciiOffset + $shift + 26) % 26));
             }
             return $char; // Non-alphabet characters remain unchanged
         }, str_split($inputString));
