@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\Http\Requests\NumberToExcelRequest;
 
 interface INumberToExcelAction
 {
