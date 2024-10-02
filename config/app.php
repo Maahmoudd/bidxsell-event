@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'APP_DEBUG' => env('APP_DEBUG', false),
+
 ];
