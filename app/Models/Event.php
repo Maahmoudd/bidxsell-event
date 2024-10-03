@@ -14,6 +14,15 @@ class Event extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * Scope a query to find events by date and venue.
+     */
+    public function scopeByDateAndVenue($query, $date, $venueId)
+    {
+        return $query->where('date', $date)
+            ->where('venue_id', $venueId);
+    }
+
     public function venue(): BelongsTo
     {
         return $this->belongsTo(Venue::class);
