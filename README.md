@@ -1,66 +1,266 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mini Event Management API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Table of Contents
 
-## About Laravel
+- [Introduction](#introduction)
+- [Database Schema](#database-schema)
+- [Problem Solving](#problem-solving)
+- [API Endpoints](#api-endpoints)
+    - [1. Login](#1-login)
+    - [2. List Events](#2-list-events)
+    - [3. Get Event](#3-get-event)
+    - [4. Store Event](#4-store-event)
+    - [5. Purchase Tickets](#5-purchase-ticket)
+- [Design Patterns](#design-patterns)
+- [Docker](#docker)
+- [Authentication](#authentication)
+- [Postman Collection](#postman-collection)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Introduction
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This project provides a comprehensive suite of APIs for managing events, ticket purchases, and customer notifications. The API includes features for listing events, retrieving event details, purchasing tickets, and sending email reminders to customers.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Database Schema
 
-## Learning Laravel
+### Entities and Attributes
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- `events`: id, name, date, venue_id
+- `venues`: id, name, address
+- `tickets`: id, event_id, customer_name, customer_email, number_of_tickets, ticket_type, group_name, special_requests
+- `users`: id, name, email, password
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Problem Solving
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Method | Path                        | Description                                      |
+|--------|-----------------------------|--------------------------------------------------|
+| GET    | /api/number-to-excel-column | Convert a positive integer to Excel column title |
+| GET    | /api/caesar-encode          | Encode a string using Caesar cipher with a shift |
+| GET    | /api/json-flattener         | Flatten a nested JSON object                     |
 
-## Laravel Sponsors
+## API Endpoints
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Path Table
 
-### Premium Partners
+| Method | Path                  | Description                          |
+|--------|-----------------------|--------------------------------------|
+| POST   | /api/login            | Authenticate User                    |
+| GET    | /api/events           | List All Events                      |
+| GET    | /api/events/{id}      | Get Single Event                     |
+| POST   | /api/events           | Store New Event                      |
+| POST   | /api/purchase-ticket  | Purchase Tickets                     |
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
 
-## Contributing
+### 1. Login
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Endpoint: `/api/login`
 
-## Code of Conduct
+Description: Authenticate user and generate token
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Headers:**
+- Content-Type: "application/json"
+- Accept: "application/json"
 
-## Security Vulnerabilities
+**Request Body:**
+```json
+{
+    "email": "admin@admin.com",
+    "password": "password"
+}
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+### 2. List Events
 
-## License
+Endpoint: `/api/events`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Description: Lists all the upcoming events
+
+**Headers:**
+- Content-Type: "application/json"
+- Accept: "application/json"
+- Authorization: "Bearer {{token}}"
+
+**Sample Response:**
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Sample Event",
+            "date": "2024-10-10 18:00:00",
+            "venue_id": 1
+        },
+        {
+            "id": 2,
+            "name": "Another Event",
+            "date": "2024-11-15 20:00:00",
+            "venue_id": 2
+        }
+    ]
+}
+```
+
+### 3. Get Event
+
+Endpoint: `/api/events/{id}`
+
+Description: gets and event
+
+
+**Headers:**
+- Content-Type: "application/json"
+- Accept: "application/json"
+- Authorization: "Bearer {{token}}"
+
+**Sample Response:**
+```json
+{
+    "data": {
+        "id": 1,
+        "name": "Sample Event",
+        "date": "2024-10-10 18:00:00",
+        "venue_id": 1,
+        "tickets": [
+            {
+                "id": 1,
+                "customer_name": "John Doe",
+                "number_of_tickets": 2
+            }
+        ]
+    }
+}
+```
+
+### 4. Store Event
+
+Endpoint: `/api/events`
+
+Description: Create an event
+
+
+**Headers:**
+- Content-Type: "application/json"
+- Accept: "application/json"
+- Authorization: "Bearer {{token}}"
+
+**Request Body:**
+```json
+{
+    "name": "New Event",
+    "date": "2024-10-15 19:00:00",
+    "venue_id": 1
+}
+```
+
+**Sample Response:**
+```json
+{
+    "data": {
+        "id": 1,
+        "name": "New Event",
+        "date": "2024-10-15 19:00:00",
+        "venue_id": 1
+    }
+}
+```
+
+### 5. Purchase Ticket
+
+Endpoint: `/api/purchase-ticket`
+
+Description: Purchase tickets
+
+**Headers:**
+- Content-Type: "application/json"
+- Accept: "application/json"
+- Authorization: "Bearer {{token}}"
+
+**Request Body:**
+```json
+{
+    "event_id": 1,
+    "ticket_type": "group",
+    "number_of_tickets": 2,
+    "group_name": "Test Group",
+    "special_requests": "Need special seating"
+}
+```
+
+**Sample Response:**
+```json
+{
+    "data": {
+        "id": 1,
+        "customer_name": "John Doe",
+        "number_of_tickets": 2,
+        "ticket_type": "group",
+        "group_name": "Test Group",
+        "special_requests": "Need special seating"
+    }
+}
+```
+
+## Design Patterns
+
+- Action Design Pattern for handling single responsibility methods
+- Service Oriented Architecture (SOA) for handling multiple responsibility methods
+- Strategy Design Pattern for handling different ticket categories depending on the ticket type incoming from the client
+
+
+## Authentication
+
+Authentication With Sanctum
+
+## Postman Collection
+
+To facilitate testing and integration, provide a Postman collection that includes sample requests for each API endpoint, along with expected responses. This will help users understand how to interact with your API.
+
+[Link to Postman Collection](https://documenter.getpostman.com/view/36493973/2sAXxLCa6b) - Update this link once you create the collection.
+
+
+- BaseUrl: your app link
+- bearer_token : the token from login
+- In Every Api Body have example about request
+
+
+# Requirements
+- PHP 8.3
+- Laravel 11
+- MySQL
+
+## Getting Started
+
+
+## Clone
+Clone this repo to your local machine using https://github.com/Maahmoudd/bidxsell-event
+and run
+```
+git clone https://github.com/Maahmoudd/bidxsell-event.git
+cd bidxsell-event
+cp .env.example .env
+composer install
+composer dumpautoload
+```
+
+# Laravel sail
+run  ./vendor/bin/sail up -d to setup environment by docker
+```
+./vendor/bin/sail up -d
+./vendor/bin/sail artisan key:generate
+```
+
+## Run Migrations
+```bash
+ ./vendor/bin/sail artisan migrate --seed
+ ````
+## Run Queue
+```bash
+ ./vendor/bin/sail artisan queue:work
+ ````
+## Run Scheduler
+```bash
+ ./vendor/bin/sail artisan schedule:run
+ ````
+## Run Test
+```bash
+ ./vendor/bin/sail artisan test
+ ````
