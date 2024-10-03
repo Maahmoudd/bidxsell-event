@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Actions\AuthAction;
 use App\Actions\CaesarEncodeAction;
 use App\Actions\FlattenJsonAction;
+use App\Actions\IAuthAction;
 use App\Actions\ICaesarEncodeAction;
 use App\Actions\IFlattenJsonAction;
 use App\Actions\INumberToExcelAction;
@@ -28,5 +30,6 @@ class ActionServiceProvider extends ServiceProvider
         $this->app->bind(INumberToExcelAction::class, NumberToExcelAction::class);
         $this->app->bind(ICaesarEncodeAction::class, CaesarEncodeAction::class);
         $this->app->bind(IFlattenJsonAction::class, FlattenJsonAction::class);
+        $this->app->bind(IAuthAction::class, AuthAction::class);
     }
 }
