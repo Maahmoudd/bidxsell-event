@@ -24,9 +24,9 @@ This project provides a comprehensive suite of APIs for managing events, ticket 
 
 ### Entities and Attributes
 
-- `events`: id, name, date, venue_id
+- `events`: id, name, price, date, venue_id
 - `venues`: id, name, address
-- `tickets`: id, event_id, customer_name, customer_email, number_of_tickets, ticket_type, group_name, special_requests
+- `tickets`: id, event_id, customer_name, customer_email, number_of_tickets, ticket_type, group_name, special_requests, complimentary_drinks, backstage_access, seat_preference
 - `users`: id, name, email, password
 
 ## Problem Solving
