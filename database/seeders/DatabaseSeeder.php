@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Ticket;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,13 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         User::factory(10)->create();
-
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'admin@admin.com',
         ]);
+        User::factory(10)->create();
+
 
         $this->call(VenuesSeeder::class);
+        $this->call(TicketsSeeder::class);
     }
 }
