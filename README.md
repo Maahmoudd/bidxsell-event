@@ -203,7 +203,6 @@ Description: Purchase tickets
 
 - Action Design Pattern for handling single responsibility methods
 - Service Oriented Architecture (SOA) for handling multiple responsibility methods
-- Strategy Design Pattern for handling different ticket categories depending on the ticket type incoming from the client
 
 
 ## Authentication
